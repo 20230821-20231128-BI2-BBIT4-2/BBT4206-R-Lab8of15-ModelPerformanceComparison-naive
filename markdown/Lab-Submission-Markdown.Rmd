@@ -91,53 +91,54 @@ if (require("randomForest")) {
 ```
 # STEP 2. Load the Dataset ----
 ```{r}
-library(readr)
-breast_cancer <- read_csv("data/breast cancer.csv", 
-                          col_types = cols(...33 = col_skip()))
+data("iris")
+
 ```
 ## 3.a. Train the Models ----
  We train the following models, all of which are using 10-fold repeated cross
-# validation with 3 repeats:
-#   LDA
-#   KNN
-#   SVM
-#   Random Forest
+ validation with 3 repeats:
+ LDA
+KNN
+SVM
+Random Forest
+CART
 ```{r}
+
 
 
 train_control <- trainControl(method = "repeatedcv", number = 10, repeats = 3)
 
 ### LDA ----
 set.seed(7)
-BreastCancer_model_lda <- train(diagnosis ~ ., data = breast_cancer,
+iris_model_lda <- train(Species ~ ., data = iris,
                                 method = "lda", trControl = train_control)
-
 
 
 ### KNN ----
 set.seed(7)
-BreastCancer_model_knn <- train(diagnosis ~ ., data = breast_cancer,
+iris_model_knn <- train(Species ~ ., data = iris,
                                 method = "knn", trControl = train_control)
 
 ### SVM ----
 set.seed(7)
-BreastCancer_model_svm <- train(diagnosis ~ ., data = breast_cancer,
+iris_model_svm <- train(Species ~ ., data = iris,
                                 method = "svmRadial", trControl = train_control)
 
 ### Random Forest ----
 set.seed(7)
-Breastcancer_model_rf <- train(diagnosis ~ ., data = breast_cancer,
+iris_model_rf <- train(Species ~ ., data = iris,
                                method = "rf", trControl = train_control)
-
+### CART ----
+set.seed(7)
+iris_model_cart <- train(Species ~ ., data = iris,
+                         method = "rpart", trControl = train_control)
 ## 3.b. Call the `resamples` Function ----
 # We then create a list of the model results and pass the list as an argument
 # to the `resamples` function.
 
-results <- resamples(list(LDA = BreastCancer_model_lda,
-                          KNN = BreastCancer_model_knn, SVM = BreastCancer_model_svm,
-                          RF = Breastcancer_model_rf))
-
-
+results <- resamples(list(LDA = iris_model_lda, CART = iris_model_cart, 
+                          KNN = iris_model_knn, SVM = iris_model_svm,
+                          RF = iris_model_rf))
 ```
 # STEP 4. Display the Results ----
 this will give a visual representation of the key evaluation metrics for the models i.e. accuracy and Kappa
