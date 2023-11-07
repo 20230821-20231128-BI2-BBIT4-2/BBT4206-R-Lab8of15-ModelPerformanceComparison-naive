@@ -146,7 +146,8 @@ if (require("randomForest")) {
 library(readr)
 breast_cancer <- read_csv("data/breast cancer.csv", 
                           col_types = cols(...33 = col_skip()))
-View(breast_cancer)# STEP 3. The Resamples Function ----
+View(breast_cancer)
+# STEP 3. The Resamples Function ----
 
 # Analogy: We cannot compare apples with oranges; we compare apples with apples.
 
@@ -173,20 +174,6 @@ set.seed(7)
 BreastCancer_model_lda <- train(diagnosis ~ ., data = breast_cancer,
                                 method = "lda", trControl = train_control)
 
-### CART ----
-class(breast_cancer)
-summary(breast_cancer)
-colnames(breast_cancer)
-breast_cancer<- as.data.frame(breast_cancer)
-# Check column names
-colnames(breast_cancer)
-
-# Check the data type of the target variable
-class(breast_cancer$diagnosis)
-
-set.seed(7)
-BreastCancer_model_cart <- train(diagnosis ~ ., data = breast_cancer,
-                                 method = "rpart", trControl = train_control)
 
 ### KNN ----
 set.seed(7)
